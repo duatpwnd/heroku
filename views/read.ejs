@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>글읽기</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/read.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        .option_list li .select0 {
+            color: #e43737;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: black;
+        }
+    </style>
+</head>
+
+<body>
+    <%
+        var curTitle = result[0].title;
+        var email = result[0].email;
+        var contents = result[0].contents;
+        var htmlenti = entities.decode(contents);
+        var time = result[0].updated_at;
+        var curId = result[0]._id;
+       
+        %>
+        <script>
+            $(document).ready(function () {
+                $('.rev').on('click', function () {
+                    var que = confirm('댓글을 삭제하시겠습니까?');
+                    if (que) {
+                        return;
+                    } else {
+                        return false;
+                    }
+                })
+
+                // text()메소드를 사용해서 write안에 값을 뽑아냄 //
+                // html()메소드를사용하면 태그를 제외하고 값을 뽑아냄 //
+                var output = $(".write1").text();
+                $(".write1").html(output);
+                // 최신순 //
+                $('.select0').on('click', function () {
+                    $.ajax({
+                        async: false,
+                        url: '/the/latest',
+                        data: { id: '<%= curId %>' },
+                        type: 'post',
+                        success: function () {
+                            $('.w_1').load('/read/?read=<%= curId %> .com', function () {
+                                $('.select0').css({ 'color': 'red' });
+                                $('.select1').css({ 'color': 'black' });
+                                $('.res').on('click', function () {
+                                    var data = $(this).attr('data-param');
+                                    $('.response' + data + '').parent().nextAll().eq(1).slideToggle(1);
+                                    $('.response' + data + '').parent().nextAll().eq(2).slideToggle(1);
+                                    return false;
+                                })
+                            });
+                        }
+                    })
+                    return false;
+                });
+                // 댓글순 //
+                $('.select1').on('click', function () {
+                    $.ajax({
+                        async: false,
+                        type: 'post',
+                        url: '/comment/order',
+                        data: { id: '<%= curId %>' },
+                        success: function (result) {
+                            $('.w_1').load('/read/?read=<%= curId %> .com', function () {
+                                $('.select0').css({ 'color': 'black' });
+                                $('.select1').css({ 'color': 'red' });
+                                $('.res').on('click', function () {
+                                    var data = $(this).attr('data-param');
+                                    $('.response' + data + '').parent().nextAll().eq(1).slideToggle(1);
+                                    $('.response' + data + '').parent().nextAll().eq(2).slideToggle(1);
+                                    return false;
+                                })
+                            });
+                        }
+                    });
+                    return false;
+                });
+                // 댓글 등록 //
+                $('.enroll_btn').on('click', function () {
+                    var que = confirm('댓글을 등록하시겠습니까?');
+                    $.ajax({
+                        async: false,
+                        url: '/add/comment',
+                        type: 'post',
+                        data: {
+                            id: '<%= curId %>',
+                            comm: $('.txt_box').val()
+                        },
+                        success: function (result) {
+                            $('.w_1').load('/read/?read=<%= curId %> .com', function () {
+                                $('.txt_box').val('');
+                                $('.reply_len').html(result[0].comments.length);
+                                // 로드된 이후에 답글 클릭시 입력창 on/off //
+                                // 답글 클릭시 //
+                                $('.res').on('click', function () {
+                                    var data = $(this).attr('data-param');
+                                    $('.modify' + data + '').parent().nextAll().eq(0).css({ 'display': 'none' });
+                                    $('.response' + data + '').parent().nextAll().eq(1).slideToggle(1);
+                                    $('.response' + data + '').parent().nextAll().eq(2).slideToggle(1);
+                                    return false;
+                                })
+                                // 수정 클릭시 //
+                                $('.mo').on('click', function () {
+                                    var data = $(this).attr('data-param');
+                                    console.log(data);
+                                    $('.modify' + data + '').parent().nextAll().eq(0).slideToggle(1);
+                                    $('.modify' + data + '').parent().nextAll().eq(1).css({ 'display': 'none' });
+                                    $('.modify' + data + '').parent().nextAll().eq(2).css({ 'display': 'none' });
+                                    return false;
+                                })
+                            });
+                        }
+                    });
+                });
+
+                // 답글 클릭시 //
+                $('.res').on('click', function () {
+                    var data = $(this).attr('data-param');
+                    $('.modify' + data + '').parent().nextAll().eq(0).css({ 'display': 'none' });
+                    $('.response' + data + '').parent().nextAll().eq(1).slideToggle(1);
+                    $('.response' + data + '').parent().nextAll().eq(2).slideToggle(1);
+                    return false;
+                })
+                // 수정 클릭시 //
+                $('.mo').on('click', function () {
+                    var data = $(this).attr('data-param');
+                    console.log(data);
+                    $('.modify' + data + '').parent().nextAll().eq(0).slideToggle(1);
+                    $('.modify' + data + '').parent().nextAll().eq(1).css({ 'display': 'none' });
+                    $('.modify' + data + '').parent().nextAll().eq(2).css({ 'display': 'none' });
+                    return false;
+                })
+
+            })
+        </script>
+        <div id="wrap">
+            <header>
+                <a href="#" class="back" onclick="back();">
+                    <img src="https://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+                </a>
+                <h1>핏빛기사단</h1>
+            </header>
+            <section>
+                <span>자유게시판</span>
+                <h2 class="theme">
+                    <%= curTitle %>
+                </h2>
+                <div class="info1">
+                    <a href="#" class="profile1">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/p.png" alt="프로필" title="프로필">
+                    </a>
+
+                    <div class="info2">
+                        <a href="#" class="id1">
+                            <%= email %>
+                        </a>
+                        <span>
+                            <%= time %>
+                        </span>
+                        <span class="bar">|</span>
+                        <span>조회999</span>
+                    </div>
+                </div>
+            </section>
+            <section class="sec2">
+                <div class="write1">
+                    <%= htmlenti %>
+                </div>
+                <div class="okay_no">
+                    <ul>
+                        <li>
+                            <a href="#" class="ok_ico" onclick="return false;">좋아요</a>
+                            <span class="c1"></span>
+                        </li>
+                        <li class="l1">
+                            <a href="#" class="no_ico" onclick="return false;">싫어요</a>
+                            <span class="c2"></span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="sec3">
+                <ul class="writting">
+                    <li>
+                        <a href="#" class="writting_ico">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/before.png" alt="이전글" title="이전글" class="before_ico">
+                            <span class="com_writting">이전글</span>
+                            <span class="theme_writting">함께하실 가족 모셔요★함께해요~함께해요~함께해요~함께해요~
+                            </span>
+                            <span class="comment_counting">(0)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="writting_ico">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/after.png" alt="이전글" title="이전글" class="before_ico">
+                            <span class="com_writting">이전글</span>
+                            <span class="theme_writting">함께하실 가족 모셔요★함께해요~함께해요~함께해요~함께해요~
+                            </span>
+                            <span class="comment_counting">(0)</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="btn_wrap">
+                    <li class="first">
+                        <a href="#">목록으로</a>
+                    </li>
+                    <li class="last">
+                        <a href="#">퍼가기</a>
+                    </li>
+                    <li>
+                        <a href="#">삭제</a>
+                    </li>
+                    <li>
+                        <a href="/write/modify/?modify=<%= result[0]._id %>">수정</a>
+                    </li>
+                    <li>
+                        <a href="#">신고</a>
+                    </li>
+                </ul>
+            </section>
+            <section class="sec4">
+                <div class="e_wrap">
+                    <h3>댓글
+                        <span class="reply_len">
+                            <%= result[0].comments.length %>
+                        </span>건</h3>
+                    <div class="wrt_btn">
+                        <form>
+                            <textarea class="txt_box" rows="1" placeholder="댓글을 남겨보세요." name="comm"></textarea>
+                            <input type="button" class="enroll_btn" value="등록">
+
+                        </form>
+                    </div>
+                </div>
+
+                <ul class="option_list">
+                    <li>
+                        <a href="#" class="select0">최신순</a>
+                    </li>
+                    <li>
+                        <a href="#" class="select1">댓글순</a>
+                    </li>
+                </ul>
+
+                <ul class="w_1">
+                    <% 
+                    for(var i=0; i<result[0].comments.length; i++){
+                           
+                        %>
+                        <li class="data1 com load">
+                            <div class="info3">
+                                <a href="#" class="profile2">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/p.png" alt="프로필" title="프로필">
+                                </a>
+                                <a href="#">
+                                    <%= result[0].comments[i].writer %>
+                                </a>
+                                <span class="ymd">
+                                    <%= result[0].comments[i].updated_at %>
+                                </span>
+                                <span class="time_info"></span>
+                                <div class="writting1" name="modifycontent">
+                                    <%= result[0].comments[i].contents %>
+                                </div>
+                            </div>
+                            <div class="a_wrap">
+                                <a href="#" class="l_a res response<%= result[0].comments[i]._id %>" data-param="<%= result[0].comments[i]._id %>">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/n1.png" class="res_ico1">
+                                    <span>답글</span>
+                                    <span style="color:#e43737" class="reply_length">
+                                        <%= result[0].comments[i].reply.length %>
+                                    </span>
+                                </a>
+
+                                <!-- 유저세션정보와 댓글아이디같으면 수정가능하고 틀리면 수정불가능-->
+                                <% if(userSession.email == result[0].comments[i].writer){
+                                 
+                                    %>
+                                    <a href="#" class="l_a l_a_center mo modify<%= result[0].comments[i]._id %>" data-param="<%= result[0].comments[i]._id %>">수정</a>
+                                    <a href="/remove/comment/?commentId=<%= i %>&curid=<%= curId %>" class="rev">
+                                        삭제
+                                    </a>
+                                    <%}else{%>
+                                        <%}%>
+                                            <a href="#" class="n_a0 r_a">
+                                                <img src="http://duatpwnd.herokuapp.com/yo/images/no.png" class="res_ico2">
+                                                <span class="o_counting"></span>
+                                            </a>
+                                            <a href="#" class="r_a0">
+                                                <img src="http://duatpwnd.herokuapp.com/yo/images/ok.png" class="res_ico2">
+                                                <span class="n_counting"></span>
+                                            </a>
+                            </div>
+                            <!-- 수정하기 입력창 -->
+
+                            <div class="en_wrap">
+                                <form>
+                                    <textarea class="comment1 modifycontent<%= i %>" name="modifycontent" rows="5"></textarea>
+                                    <input type="button" class="en_btn modify_btn" value="수정완료" onclick="$.ajax({url :'/modify/comment',
+                                                                                                     type:'post',
+                                                                                                     data :
+                                                                                                            { curholic :'<%= curId %>' ,
+                                                                                                            commentId : '<%= i %>',
+                                                                                                            modifycontent: $('.modifycontent<%= i %>').val()
+                                                                                                            },
+                                                                                                    success:function (result) {
+                                                                                    
+                                                                                                $('.w_1').load('/read/?read=<%= curId %> .load',function(){
+                                                                                                    $('.modficontent<%= i %>').val('');
+                                                                                                    // 답글 클릭시 //
+                                                                                                    $('.res').on('click',function(){
+                                                                                                        var data = $(this).attr('data-param');
+                                                                                                        $('.modify'+data+'').parent().nextAll().eq(0).css({'display':'none'});
+                                                                                                            $('.response'+data+'').parent().nextAll().eq(1).slideToggle(1);
+                                                                                                            $('.response'+data+'').parent().nextAll().eq(2).slideToggle(1);
+                                                                                                        return false;
+                                                                                                    })
+                                                                                                    // 수정 클릭시 //
+                                                                                                    $('.mo').on('click',function(){
+                                                                                                        var data = $(this).attr('data-param');
+                                                                                                            console.log(data);
+                                                                                                            $('.modify'+data+'').parent().nextAll().eq(0).slideToggle(1);
+                                                                                                            $('.modify'+data+'').parent().nextAll().eq(1).css({'display':'none'});
+                                                                                                            $('.modify'+data+'').parent().nextAll().eq(2).css({'display':'none'});
+                                                                                                        return false;
+                                                                                                    })
+                                                                                                });                 
+                                                                                                    }
+                                                                                                    });">
+                                </form>
+                            </div>
+
+                            <!-- 답글달기 입력창 -->
+
+                            <div class="rbox<%= i %> reply_list">
+                                <% for(var a=0; a<result[0].comments[i].reply.length; a++ ){
+                                %>
+                                    <div class="data1 res1" style="background: #f1f1f1">
+                                        <div class="info3">
+                                            <a href="#" class="profile2">
+                                                <img src="https://duatpwnd.herokuapp.com/yo/images/p.png" alt="프로필" title="프로필">
+                                            </a>
+                                            <a href="#">
+                                                <%= result[0].comments[i].reply[a].writer %>
+                                            </a>
+                                            <span class="ymd">
+                                                <%= result[0].comments[i].reply[a].created_at %>
+                                            </span>
+                                            <span class="time_info"></span>
+                                            <div class="reply1">
+                                                <span>
+                                                    <%= result[0].comments[i].reply[a].contents %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="a_wrap">
+                                            <a href="#" class="l_a l_a_center mo">수정</a>
+                                            <a href="#" class="l_a rev">삭제</a>
+                                            <a href="#" class="n_a0 r_a">
+                                                <img src="http://duatpwnd.herokuapp.com/yo/images/no.png" class="res_ico2">
+                                                <span class="o_counting"></span>
+                                            </a>
+                                            <a href="#" class="r_a0">
+                                                <img src="http://duatpwnd.herokuapp.com/yo/images/ok.png" class="res_ico2">
+                                                <span class="n_counting"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <%}%>
+                            </div>
+                            <div class="en_wrap">
+                                <form>
+                                    <textarea class="comment1 replycontent<%= i %>" name="replycontent" rows="5"></textarea>
+                                    <input type="button" class="en_btn" value="등록" onclick="$.ajax({url :'/reply/comment',
+                                                                                                     type:'post',
+                                                                                                     data :
+                                                                                                            { curholic :'<%= curId %>' ,
+                                                                                                            commentId : '<%= i %>',
+                                                                                                            replycontent: $('.replycontent<%= i %>').val()
+                                                                                                            },
+                                                                                                    success:function (result) {
+                                                                                    
+                                                                                                $('.rbox<%= i %>').load('/read/?read=<%= curId %> .rbox<%= i %> .res1',function(){
+                                                                                                    $('.response'+result._id+' .reply_length').html(result.reply.length);
+                                                                                                    $('.replycontent<%= i %>').val('');
+                                                                                                    $('.rbox<%= i %>').css({'display':'block'});
+                                                                                                });                 
+                                                                                                    }
+                                                                                                    });">
+                                </form>
+                            </div>
+                        </li>
+
+                        <%}%>
+                </ul>
+                <a href="#" class="read_more_comments" onclick="readComments(5); return false;">댓글 더보기></a>
+            </section>
+            <footer>
+                <ul>
+                    <li>
+                        <a href="/friendMain" class="friend_btn">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/guildtalk/chat" class="talk_btn">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/guildtalk/main" class="guild_btn">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                        </a>
+                    </li>
+                </ul>
+            </footer>
+        </div>
+</body>
+
+</html>

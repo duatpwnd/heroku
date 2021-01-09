@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>전화번호로 가입</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/font.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/join_method.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/placeholder.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+</head>
+
+<body>
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+        <header>
+            <a href="join.html" class="back">
+                <img src="https://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>전화번호로 가입</h1>
+        </header>
+        <section>
+            <div class="phone_join">
+                <form action="/process/listuser" method="post">
+                    <fieldset>
+                        <legend>전화번호로 가입</legend>
+                        <div class="cord_enter">
+                            <div class="phone_receive">
+                                <input type="text" placeholder="휴대폰 번호" class="com_input_box" id="ph1" name="user_phone">
+                                <input type="button" checked value="인증코드 받기" class="cord_btn">
+                            </div>
+                            <p class="ph_txt1">휴대폰 번호를 입력하세요.</p>
+                            <p class="ph_txt3">잘못된 휴대폰 번호입니다.</p>
+                            <div class="cord_confirm">
+                                <input type="password" placeholder="인증코드 입력" class="com_input_box" id="ph2">
+                                <span class="limit_time"></span>
+                                <input type="button" value="확인" class="confirm_btn">
+                            </div>
+                            <p class="ph_txt4">인증코드를 입력하세요.</p>
+                            <p class="ph_txt2">인증코드가 일치하지 않습니다.</p>
+                        </div>
+                        <div class="pw_enter">
+                            <div class="pw_confirm1">
+                                <input type="password" placeholder="비밀번호" class="com_input_box" id="pw1" name="user_pw">
+                            </div>
+                            <p class="pw_txt1">비밀번호를 입력하세요.</p>
+                            <p class="pw_txt2">비밀번호 8자이상 입력하세요.</p>
+                            <div class="pw_confirm2">
+                                <input type="password" placeholder="비밀번호 확인" class="com_input_box" id="pw2">
+                            </div>
+                            <p class="pw_txt3">비밀번호가 일치 하지 않습니다.</p>
+                        </div>
+                        <div class="agree_wrap">
+                            <div class="terms">
+                                <input type="checkbox" id="terms_agree" checked>
+                                <label for="terms_agree">
+                                    <span></span>
+                                    이용약관 동의</label>
+                                <a href="#">내용보기</a>
+                            </div>
+                            <div class="privacy">
+                                <input type="checkbox" id="privacy_agree">
+                                <label for="privacy_agree">
+                                    <span></span>
+                                    개인정보 취급방침 동의</label>
+                                <a href="#">내용보기</a>
+                            </div>
+                        </div>
+                        <p class="help_txt">
+                            비밀번호 분실 이나 기타 계정 관련 문제 발생시 이메일을 통하여 도움 받으실 수 있습니다.
+                        </p>
+                        <button type="submit" class="join_btn">가입하기</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>게임 검색하기</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/swiper.min.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/swiper_search.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/swiper.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+    <style>
+        .swiper-pagination-bullet {
+            width: 33.3%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <header>
+            <a href="#" class="back" onclick="back();">
+                <img src="https://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>게임 검색하기</h1>
+        </header>
+        <div class="swiper-container">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-wrapper">
+                <!-- Add Pagination -->
+                <div class="swiper-slide">
+                    <div class="search_menu">
+                        <input type="text" id="spc_search" class="nickname_enter" placeholder="검색어 입력" onkeyup="search();">
+                        <button type="submit" class="nickname_search">
+                    </div>
+                    <div class="member_list">
+                        <ul class="member_list_wrap">
+                            <li>
+                                <a href="/guildmake" class="profile_thumb ch_round">
+                                    <img src="https://duatpwnd.herokuapp.com/yo/images/gameprofile2.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <a href="/guildmake" class="member_info">
+                                    <span class="user_id user1">문도
+                                    </span>
+                                    <span class="enroll_ico">
+                                        <img src="https://duatpwnd.herokuapp.com/yo/images/enroll_ico.png">
+                                    </span>
+                                    <span class="member member1">길드원
+                                        <span>9,856</span>명</span>
+                                    <span class="arrow_ico">
+                                        <img src="https://duatpwnd.herokuapp.com/yo/images/arrow.png" alt="화살표" title="화살표">
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="profile_thumb ch_round">
+                                    <img src="https://duatpwnd.herokuapp.com/yo/images/gameprofile2.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <a href="#" class="member_info">
+                                    <span class="user_id user1">문도
+                                    </span>
+                                    <span class="enroll_ico">
+                                        <img src="https://duatpwnd.herokuapp.com/yo/images/enroll_ico.png">
+                                    </span>
+                                    <span class="member member1">길드원
+                                        <span>9,856</span>명</span>
+                                    <span class="arrow_ico">
+                                        <img src="https://duatpwnd.herokuapp.com/yo/images/arrow.png" alt="화살표" title="화살표">
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <a href="game_register.html" class="guild_make_btn">미등록 게임 추가</a>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="search_menu">
+                        <input type="text" id="spc_search" class="nickname_enter" placeholder="검색어 입력" onkeyup="search2();">
+                        <button type="submit" class="nickname_search">
+                    </div>
+                    <div class="member_list">
+                        <ul class="member_list_wrap">
+                            <% for(var i=0; i<guild.length; i++){
+                              var abc = guild[i].guildimage;
+                              if(abc == ''){
+                          %>
+                                <li>
+                                    <a href="/guildmaster/?page=1&guildid=<%= guild[i]._id %>&guildname=<%= guild[i].guildname %>">
+                                        <span class="profile_thumb ch_round">
+                                            <img src="https://duatpwnd.herokuapp.com/yo/images/gameprofile2.png" alt="기본프로필" title="기본프로필">
+                                        </span>
+                                        <span class="member_info">
+                                            <span class="user_id user1">
+                                                <%= guild[i].guildname %>
+                                            </span>
+                                            <span class="enroll_ico">
+                                                <img src="https://duatpwnd.herokuapp.com/yo/images/enroll_ico.png">
+                                            </span>
+                                            <span class="member member1">길드원
+                                                <span>9,856</span>명</span>
+                                            <span class="arrow_ico">
+                                                <img src="https://duatpwnd.herokuapp.com/yo/images/arrow.png" alt="화살표" title="화살표">
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <%}else{%>
+                                    <li>
+                                        <a href="/guildmaster/?page=1&guildid=<%= guild[i]._id %>&guildname=<%= guild[i].guildname %>">
+                                            <span class="profile_thumb ch_round">
+                                                <img src="<%= guild[i].guildimage %>" alt="기본프로필" title="기본프로필">
+                                            </span>
+                                            <span class="member_info">
+                                                <span class="user_id user1">
+                                                    <%= guild[i].guildname %>
+                                                </span>
+                                                <span class="enroll_ico">
+                                                    <img src="https://duatpwnd.herokuapp.com/yo/images/enroll_ico.png">
+                                                </span>
+                                                <span class="member member1">길드원
+                                                    <span>9,856</span>명</span>
+                                                <span class="arrow_ico">
+                                                    <img src="https://duatpwnd.herokuapp.com/yo/images/arrow.png" alt="화살표" title="화살표">
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <%}%>
+                                        <%}%>
+                        </ul>
+                    </div>
+                    <a href="guild_make.html" class="guild_make_btn">길드 만들기</a>
+                </div>
+                <div class="swiper-slide">
+                    <div class="search_menu">
+                        <input type="text" id="spc_search" class="nickname_enter" placeholder="검색어 입력" onkeyup="search3();">
+                        <button type="submit" class="nickname_search">
+                    </div>
+                    <div class="member_list">
+                        <ul class="member_list_wrap">
+                            <% for(var i=0; i<result.length; i++){
+                                %>
+                                <li>
+                                    <a href="/guildmake" class="profile_thumb ch_round">
+                                        <img src="https://duatpwnd.herokuapp.com/yo/images/gameprofile2.png" alt="기본프로필" title="기본프로필">
+                                    </a>
+                                    <a href="/guildmake" class="member_info">
+                                        <span class="user_id user1">
+                                            <%= result[i].email %>
+                                        </span>
+                                        <span class="enroll_ico">
+                                            <img src="https://duatpwnd.herokuapp.com/yo/images/enroll_ico.png">
+                                        </span>
+                                        <span class="member member1">길드원
+                                            <span>9,856</span>명</span>
+                                        <span class="arrow_ico">
+                                            <img src="https://duatpwnd.herokuapp.com/yo/images/arrow.png" alt="화살표" title="화살표">
+                                        </span>
+                                    </a>
+                                </li>
+                                <%}%>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        // pagination 설정 //
+        var array = ['GAMES', 'GUILDS', 'USERS'];
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (array[index]) + '</span>';
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

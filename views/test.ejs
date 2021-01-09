@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ejs</title>
+    <style>
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Apple SD Gothic Neo', Sans-serif;
+            font-size: 20px;
+        }
+
+        body {
+            min-width: 1200px;
+            padding: 20px;
+            background: #dbe0e1;
+        }
+
+        input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+            vertical-align: middle;
+        }
+
+        .write_form {
+            padding: 25px;
+            border-radius: 4px;
+            background: #b4b4b4;
+            width: 40%;
+        }
+
+        .write_form input,
+        .usercontents {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            font-size: 20px;
+            box-sizing: border-box;
+            border: 2px solid black;
+        }
+
+        .usercontents {
+            resize: none;
+        }
+
+        .usercontents::placeholder {
+            font-weight: bold;
+        }
+
+        .remove {
+            float: right;
+        }
+
+        .remove,
+        .add,
+        .search_btn,
+        .write_btn {
+            background: black;
+            border-radius: 4px;
+            color: white;
+            font-size: 20px;
+            border: 0;
+            padding: 10px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .add {
+            background: #277c67;
+        }
+
+        li {
+
+            list-style: none;
+            padding: 10px;
+            border-bottom: 1px solid black;
+        }
+
+        li a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .paging li {
+            border-bottom: 0;
+        }
+
+        .paging li a {
+            padding: 20px;
+            font-size: 40px;
+            display: block;
+        }
+
+        .paging:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+
+        .board {
+            height: 315px;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .board li a {
+            font-size: 20px;
+        }
+
+        .board li .contents {
+            font-size: 20px;
+        }
+
+        .number {
+            float: right;
+            font-size: 20px;
+        }
+
+        .theme label {
+            font-size: 20px;
+        }
+
+        .theme {
+            background: #6aa9cc;
+        }
+
+        .theme span {
+            font-size: 20px;
+        }
+
+        .search_word {
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+
+        .paging {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .page_link,
+        .theme {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function enti() {
+            const contents = document.querySelectorAll('.contents');
+            contents.forEach(function (e, i) {
+                const a = e.innerText;
+                const str = a.replace(/\p/g, 'span');
+                e.innerHTML = str;
+            })
+        }
+
+        // 전체 체크 //
+        function allselect() {
+            const allCheckBtn = document.getElementById('allselect');
+            if (allCheckBtn.checked == true) {
+                const checkBtn = document.querySelectorAll('.common_check');
+                Array.prototype.forEach.call(checkBtn, function (e, i) {
+                    checkBtn[i].checked = true;
+                })
+            } else {
+                const checkBtn = document.querySelectorAll('.common_check');
+                Array.prototype.forEach.call(checkBtn, function (e, i) {
+                    checkBtn[i].checked = false;
+                })
+            }
+        }
+        function selectBtn() {
+            const isChecked = [];
+            const checkBtn = document.querySelectorAll('.common_check');
+            Array.prototype.forEach.call(checkBtn, function (e, i) {
+                isChecked.push(checkBtn[i].checked);
+            })
+            if (isChecked.indexOf(false) == -1) {
+                document.getElementById('allselect').checked = true;
+            } else {
+                document.getElementById('allselect').checked = false;
+            }
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            enti();
+        })
+    </script>
+
+    <body>
+        <div id="wrap">
+            <input type="text" class="search_word" placeholder="search.." v-on:input="searchWord=$event.target.value">
+            <button class="search_btn" @click="search();">검색</button>
+            <button class="remove" @click="remove();">글삭제</button>
+            <ul class="board">
+                <li class="theme">
+                    <span style="width: 25%">
+                        <input type="checkbox" id="allselect" onclick="allselect();">
+                        <label for="allselect">전체체크</label>
+                    </span>
+                    <span style="width: 25%">아이디</span>
+                    <span style="width: 15%">제목</span>
+                    <span style="width: 25%">번호</span>
+                </li>
+
+                <li v-for="todos in todo">
+                    <a :href="'/read/?page=' + todos.number" class="page_link">
+                        <div style="width: 25%;">
+                            <input type="checkbox" :value="todos.number" class="common_check" onclick="selectBtn();">
+                        </div>
+                        <span style="width: 25%;">
+                            {{todos.id}}
+                        </span>
+                        <span class="contents" style="width: 15%; overflow: hidden; text-overflow: ellipsis; white-space: pre">{{todos.title}}</span>
+                        <span class="number" style="width: 25%;">
+                            {{todos.number}}
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+
+            <ul class="paging">
+                <li>
+                    <%
+                    if(pageNumber == 1){%>
+
+                        <%}else{%>
+                            <a href="/board/?page=1">
+                                <<</a>
+                                    <%}%>
+                                        %>
+                </li>
+                <li>
+                    <%
+                    let pet = pageNumber-1;
+                   %>
+                        <% if(paging > 1){ %>
+                            <% if(pageNumber == 1){%>
+                                <%}else{ %>
+                                    <a href="/board/?page=<%= pet %>">
+                                        <</a>
+                                            <%}%>
+                                                <%}%>
+
+                </li>
+                <%
+                var max;
+                var a;
+                if(initial > 3){
+                    a = initial-2;
+                    max = initial+2;
+                }else{
+                    a = 1;
+                    max = 5;
+                }
+                if(paging < max ){
+                    if(paging>5){
+                        a = paging - 4;
+                        max = paging;
+                    } else{
+                        a = 1;
+                        max = paging;
+                    }
+                }
+                for(let i = a; i<=max; i++){ %>
+                    <li>
+                        <%
+                    if(i == pageNumber){%>
+                            <a href="/<%= board %>/?page=<%= i %>&keyword=<%= keyword %>" style="color: red; font-weight: bold;">
+                                <%= i %>
+                            </a>
+                            <%}else{%>
+                                <a href="/<%= board %>/?page=<%= i %>&keyword=<%= keyword %>" style="color: black;">
+                                    <%= i %>
+                                </a>
+                                <%}%>
+                    </li>
+                    <%}%>
+                        <li>
+                            <% if(paging > 1){%>
+                                <%if(paging == pageNumber){%>
+
+                                    <%}else{%>
+                                        <a href="/board/?page=<%= pageNumber+1 %>">></a>
+                                        <%}%>
+                                            <%}%>
+                        </li>
+                        <li>
+                            <%
+                                if(paging == pageNumber){%>
+
+                                <%}else{%>
+                                    <a href="/board/?page=<%= paging %>">
+                                        >></a>
+                                    <%}%>
+                                        %>
+                        </li>
+            </ul>
+            <button class="write_btn" @click="popup();">글작성하기</button>
+            <div class="write_form" v-show="isShow">
+                <div>
+                    <input type="text" :value='writer' class="write" placeholder="글쓴이" v-on:input="writer=$event.target.value">
+                    <input type="text" :value="tit" class="userid" placeholder="글제목" v-on:input="tit=$event.target.value">
+                </div>
+                <div>
+                    <textarea id="editor1" :value="contents" class="usercontents" placeholder="글내용" v-on:input="contents=$event.target.value"></textarea>
+                </div>
+                <div>
+
+                    <button class="add" @click="write();">글작성완료</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            new Vue({
+                el: '#wrap',
+                data: {
+                    todo: '',
+                    isShow: false,
+                    writer: '',
+                    tit: '',
+                    contents: '',
+                    searchWord: ''
+                },
+                methods: {
+                    list: function () {
+                        const self = this;
+                        axios.get('/test/list/?page=<%= pageNumber %>').then(function (result) {
+                            self.todo = '';
+                            for (let s = 0; s < result.data.length; s++) {
+                                const str = result.data[s].title;
+                                const str1 = str.replace(/&nbsp/g, ' ');
+                                result.data[s].title = str1;
+                                self.todo = result.data;
+                                console.log(self.todo);
+                            }
+                            const check = document.querySelectorAll('.common_check');
+                            check.forEach(function (el, index) {
+                                el.checked = false;
+                            })
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                    },
+                    popup: function () {
+                        this.isShow = !this.isShow;
+                    },
+                    // 글작성 //
+                    write: function () {
+                        const self = this;
+                        var str1 = this.tit;
+                        str1 = str1.replace(/ /g, '&nbsp');
+                        var str = this.contents;
+                        str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+                        axios.post('/test/add', {
+                            id: this.writer,
+                            title: str1,
+                            contents: str,
+                        }).then(function (result) {
+                            console.log(result);
+                            self.tit = '';
+                            self.contents = '';
+                            self.writer = '';
+                            self.list();
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                    },
+                    // 글삭제 //
+                    remove: function () {
+                        const array = [];
+                        const self = this;
+                        const check = document.querySelectorAll('.common_check');
+                        Array.prototype.forEach.call(check, function (e, i) {
+                            if (e.checked) {
+                                array.push(e.value);
+                            }
+                        });
+                        console.log(array);
+                        axios.delete('/test/delete', {
+                            data: { data: JSON.stringify(array) }
+                        }).then(function (result) {
+                            console.log(result);
+                            self.list();
+                        }).catch(function (err) {
+                            console.log(err);
+                        });
+                    },
+                    search: function () {
+                        const self = this;
+                        const obj = {
+                            search: this.searchWord
+                        }
+                        axios.post('/test/search/?page=<%= pageNumber %>', {
+                            data: JSON.stringify(obj)
+
+                        }).then(function (result) {
+
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                    },
+                },
+                created: function () {
+                    this.list();
+
+                }
+            })
+        </script>
+    </body>
+
+</html>

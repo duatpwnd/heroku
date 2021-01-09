@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>휴대폰번호 로그인</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/font.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/login_method.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/placeholder.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+</head>
+
+<body>
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+        <header>
+            <a href="multiogin.html" class="back">
+                <img src="https://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>휴대폰번호 로그인</h1>
+        </header>
+        <section>
+            <h1 class="phone_logo">` GUILD TALK
+            </h1>
+            <div class="contents">
+                <form action="/login/success" method="post">
+                    <fieldset>
+                        <legend>로그인</legend>
+                        <div class="phone_id">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/phone_id.png" alt="휴대폰번호" title="휴대폰번호" class="phone_ico">
+                            <input type="number" id="phone_ch1" placeholder="휴대폰번호" name="user_phone">
+                        </div>
+                        <div class="phone_pw">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/email_pw.png" class="pw_ico" alt="비밀번호" title="비밀번호">
+                            <input type="password" id="phone_ch2" placeholder="비밀번호" name="user_pw">
+                        </div>
+                        <!-- 아이디/비밀번호 잘못 입력시 나오는 문구-->
+                        <p class="error_text">
+                            아이디 또는 비밀번호를 다시 확인하세요
+                            <br>길드톡에 등록되지 않은 아이디이거나, 아이디 또는
+                            <br>비밀번호를 잘못 입력하셨습니다
+                        </p>
+                        <input type="submit" value="로그인" class="submit_btn">
+                    </fieldset>
+                </form>
+                <div class="find_info">
+                    <a href="join.html" class="member_join">회원가입</a>
+                    <span class="bar">|</span>
+                    <a href="find_password.html" class="pw_find">비밀번호찾기</a>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+</body>
+
+</html>

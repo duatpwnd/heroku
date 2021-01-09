@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>이메일주소 로그인</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/login_method.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/placeholder.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+</head>
+
+<body>
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+        <header>
+            <a href="multiogin.html" class="back">
+                <img src="https://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>이메일주소 로그인</h1>
+        </header>
+        <section>
+            <h1 class="email_logo">
+                GUILD TALK
+            </h1>
+            <div class="cotents">
+                <form action="/guildtalk/emailLogin" method="post">
+                    <fieldset>
+                        <legend>로그인</legend>
+                        <div class="email_id">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/email_id.png" alt="이메일주소" title="이메일주소" class="email_ico">
+                            <input type="email" placeholder="이메일주소" name="email">
+                        </div>
+                        <div class="email_pw">
+                            <img src="https://duatpwnd.herokuapp.com/yo/images/email_pw.png" alt="비밀번호" title="비밀번호" class="pw_ico">
+                            <input type="password" placeholder="비밀번호" name="password">
+                        </div>
+                        <% if(message){ %>
+                            <p>
+                                <%= message %>
+                            </p>
+                            <%}%>
+                                <input type="submit" value="로그인" class="submit_btn">
+                    </fieldset>
+                </form>
+                <div class="find_info">
+                    <a href="/guildtalk/join">회원가입</a>
+                    <span class="bar">|</span>
+                    <a href="/find_password">비밀번호찾기</a>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>그룹채팅방</title>
+    <link href="https://duatpwnd.herokuapp.com/yo/common/swiper.min.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/swiper_search.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" rel="stylesheet" type="text/css">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/socket.io.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/swiper.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const socket = io();
+            $('.roomMake').on('click', function () {
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth()+1;
+                if(month<10){
+                    month = '0' + month;
+                }
+                let day = date.getDate();
+                if(day<10){
+                    day = '0' + day;
+                }
+                const roomId = $('#roomid').val();
+                const roomName = $('#roommake').val();
+                const userId = $('.userid').val();
+                socket.emit('room', {command:'create',roomId: roomId,userId:userId, roomName: roomName, roomOwner: roomId,makeDate:year+'-'+month+'-'+day})
+                location.href = 'http://localhost:8100/guildtalk/chat'
+            })
+           
+        })
+    </script>
+</head>
+
+<body>
+    <input type="hidden" class="userid" value="<%= userinfo.email %>">
+    <input type="text" value="meeting01" id="roomid">
+    <input type="text" value="채팅방1" id="roommake">
+    <button class="roomMake">입장하기</button>
+</body>
+
+</html>

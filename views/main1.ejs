@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>메인페이지1</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/swiper.min.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/main.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" rel="stylesheet" type="text/css">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/swiper.min.js"></script>
+    <script>
+        function circle() {
+            $('.progress span').nextAll().remove();
+            var doms = '';
+            var $m = $('.progress');
+            var $data = $m.find('span');
+            var data = $m.data('percent');
+            var com = Math.round(data / 100 * 360);
+            var dur = 2000;
+
+            var getVendorPrefix = function () {
+                var body = document.body || document.documentElement,
+                    style = body.style,
+                    transition = "Transition",
+                    vendor = ["Moz", "Webkit", "ms"],
+                    lastGage,
+                    i = 0;
+                while (i < vendor.length) {
+                    if (typeof style[vendor[i] + transition] === "string") {
+                        return vendor[i];
+                    }
+                    i++;
+                }
+                return false;
+            };
+            var prefix = getVendorPrefix();
+            var transform = prefix + 'Transform';
+
+            for (var i = 180; i <= com + 144; i++) {
+                doms = '<div class="gage-bar"></div>';
+                $m.append(doms);
+                $('.gage-bar:last').css(transform, 'rotate(' + i + 'deg)');
+            }
+            //$m.append(doms);
+
+            $m.find('div').each(function (index, item) {
+                $(item).stop().delay(index * 5).fadeIn(50);
+            });
+
+            for (var j = 0; j <= data; j++) {
+                (function (index) {
+                    var time = (360 / 100 * index) * 5;
+                    setTimeout(function () {
+                        $data.text(index + '%');
+                    }, time);
+                })(j);
+            }
+        }
+        $(document).ready(function () {
+            setTimeout(function () { circle(); }, 200)
+            const counter = 235150;
+            const result = counter.toLocaleString();
+            document.getElementsByClassName('counter')[0].innerText = result
+            $('.counter').counterUp({
+                delay: 10,
+                time: 1000
+            });
+        })
+    </script>
+</head>
+
+<body>
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+
+        <div class="menu_wrap">
+            <ul>
+                <li class="top">
+                    메뉴
+                    <img src="http://duatpwnd.herokuapp.com/yo/images/bigclose.png" alt="닫기" title="닫기" class="close" onclick="disappear();">
+                </li>
+                <li>
+                    <a href="http://duatpwnd.herokuapp.com/yo/profile_modify.html">
+                        <span>프로필</span>
+                        <span class="arrow">></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://duatpwnd.herokuapp.com/yo/set.html">
+                        <span>설정</span>
+                        <span class="arrow">></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://duatpwnd.herokuapp.com/yo/guild_make.html">
+                        <span>길드만들기</span>
+                        <span class="arrow">></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <header class="pd_ch">
+            <h1 class="guildtalk_logo">
+                길드톡로고
+            </h1>
+            <a href="game_search.html" class="search">
+                <img src="images/search1.png" alt="검색" title="검색">
+            </a>
+            <a href="#" class="menu" onclick="menu();">
+                <img src="images/menu.png" alt="메뉴" title="메뉴">
+            </a>
+        </header>
+        <!-- 원형 프로그레스바 -->
+        <div class="pro">
+            <div class="test" onclick="circle();"></div>
+            <div class="progress" data-percent="97">
+
+                <span></span>
+            </div>
+            <div class="ex_value">
+                <p class="is_ex_value">다음 레벨까지 남은 경험치</p>
+                <span class="counter"></span>
+                <span class="ext">exp</span>
+            </div>
+        </div>
+        <div class="swiper-container">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-wrapper">
+                <!-- Add Pagination -->
+                <div class="swiper-slide">
+                    <section class="s1">
+                        <div class="m1">
+                            <a href="mygame_search.html" class="more_view">
+                                <img src="images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">내게임</h1>
+                        </div>
+                        <ul class="guild_wrap">
+                            <li>
+                                <a href="gamehome.html" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                            <li>
+                                <a href="#" class="guild_mark1">
+                                    <img src="images/guild_mark.png" alt="드래곤슬레이어" title="드래곤슬레이어">
+                                </a>
+
+                                <h2 class="guild_name">게임명1</h2>
+                            </li>
+                        </ul>
+                        <a href="mygame_search.html" class="add_btn">추가하기 +</a>
+                    </section>
+                    <section class="s2">
+                        <div class="m1">
+                            <a href="new_notice.html" class="more_view">
+                                <img src="images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">새소식</h1>
+                        </div>
+                        <ul class="cur_trick">
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="s2">
+                        <div class="m1">
+                            <a href="free_board.html" class="more_view">
+                                <img src="images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">자유게시판</h1>
+                        </div>
+                        <ul class="cur_trick">
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="s2 s3">
+                        <div class="m1">
+                            <a href="trick_board.html" class="more_view">
+                                <img src="images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">공략게시판</h1>
+                        </div>
+                        <ul class="cur_trick">
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">불멸 ++ 유물 수치 정보 및 세부정보</span>
+                                    <span>
+                                        <span class="nick_name">인중타격</span>
+                                        <span class="date">2018.02.01
+                                            <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new" class="new">
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <a href="#" class="comment">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                                    <span>999</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="swiper-slide">
+                    <section class="s1 s2">
+                        <div class="m1">
+                            <a href="myguildupdate.html" class="more_view">
+                                <img src="http://duatpwnd.herokuapp.com/yo/images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">New Game</h1>
+                        </div>
+                        <ul class="cur_trick">
+                            <li>
+                                <a href="guild_master.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="guild_master.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="s2">
+                        <div class="m1">
+                            <a href="myguildevent.html" class="more_view">
+                                <img src="http://duatpwnd.herokuapp.com/yo/images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">Best Game</h1>
+                        </div>
+                        <ul class="cur_trick">
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="s2 s3">
+                        <div class="m1">
+                            <a href="myguildevent.html" class="more_view">
+                                <img src="http://duatpwnd.herokuapp.com/yo/images/more.png" alt="더보기" title="더보기">
+                            </a>
+                            <h1 class="title">Hot Game</h1>
+                        </div>
+                        <ul class="cur_trick">
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="read.html" class="guild_mark">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                                </a>
+                                <a href="read.html" class="guild_s1">
+                                    <span class="l_move">게임명</span>
+                                    <span>
+                                        <span class="date">2018.02.01</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="c_w">
+            <div class="swiper-container1">
+                <div class="swiper-wrapper">
+                    <!-- Add Pagination -->
+                    <div class="swiper-slide">
+                        <img src="images/banner1.png" alt="군도" title="군도">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/banner2.png" alt="촉산" title="촉산">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/banner3.png" alt="촉산" title="촉산">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        // pagination1 설정 //
+        var array = ['MY GAME', 'BEST GAME'];
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (array[index]) + '</span>';
+                }
+            },
+        });
+        // pagination2 설정 //
+        var swiper = new Swiper('.swiper-container1', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            }
+        });
+    </script>
+</body>
+
+</html>

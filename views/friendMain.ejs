@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>친구추가</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/friend_add.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 대화명이 없는경우 이미지가 찌그러지는거를 방지하기위해 사용 화면에는 안보여도 영역은 차지 //
+            var cvsn = $('.visible').text();
+            if (cvsn == '') {
+                $('.visible').parent().css({ 'visibility': 'hidden' });
+                $('.visible').css({
+                    'padding': '2% 0',
+                    'display': 'inline-block'
+                })
+            }
+        })
+    </script>
+</head>
+
+<body>
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+        <div class="menu_wrap">
+            <ul>
+                <li class="top">
+                    메뉴
+                    <img src="http://duatpwnd.herokuapp.com/yo/images/bigclose.png" alt="닫기" title="닫기" class="close" onclick="disappear();">
+                </li>
+                <li>
+                    <a href="profile_modify.html">
+                        <span>프로필</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="set.html">
+                        <span>설정</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_make.html">
+                        <span>길드만들기</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="friend_add.html">
+                        <span>친구추가</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="hide_friend.html">
+                        <span>숨김친구 관리</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="block_friend.html">
+                        <span>차단친구 관리</span>
+
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <header>
+            <div class="search_menu">
+                <input type="text" class="nickname_enter" placeholder="검색어 입력" onkeyup="search();">
+                <button type="submit" class="nickname_search">
+            </div>
+            <a href="#" class="menu" onclick="menu();">
+                <img src="http://duatpwnd.herokuapp.com/yo/images/menu.png" alt="메뉴" title="메뉴">
+            </a>
+        </header>
+        <ul class="friend_list">
+            <li>
+                <h2 class="theme" onclick="chat2();">내 프로필</h2>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">기본닉Q네임자신</span>
+                    <p class="conversation_name">
+                        <span class="visible"></span>
+                    </p>
+                </a>
+            </li>
+            <li>
+                <h2 class="theme">새로운 친구</h2>
+            </li>
+            <li>
+                <a href="friend_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">
+                        <span>asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</span>
+                    </p>
+                </a>
+            </li>
+            <li>
+                <h2 class="theme">즐겨찾기</h2>
+            </li>
+            <li>
+                <a href="#" onclick="profile();">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">내프로필 롱터치</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="profile1();">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기 롱터치</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="profile2();">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">비즐겨찾기 롱터치</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <h2 class="theme">내 친구</h2>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+            <li>
+                <a href="my_profile.html">
+                    <span class="profile_ico">
+                        <img src="http://guildtalk.co.kr/uploads/cache/member_photo/2018/08/thumb-2b049799f6b5475f43a9980be126c702_80x80.jpg" alt="프로필이미지"
+                            title="프로필이미지">
+                    </span>
+                    <span class="user_name">즐겨찾기닉네임2</span>
+                    <p class="conversation_name">asdnaskndklansdklnsadklsandlknsakdlnasklndklnsaldnsak</p>
+                </a>
+            </li>
+
+        </ul>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+</body>
+
+</html>

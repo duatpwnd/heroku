@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>길드홈 길드장</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/swiper.min.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/guild_member_manage.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/swiper.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+
+    <style>
+        .swiper-pagination-bullet {
+            width: 33.33%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="menu_wrap">
+            <ul>
+                <li class="top">
+                    메뉴
+                    <img src="http://duatpwnd.herokuapp.com/yo/images/bigclose.png" alt="닫기" title="닫기" class="close"
+                        onclick="disappear();">
+                </li>
+                <li>
+                    <a href="guild_manage.html">길드 관리
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="member_manage.html">길드원 관리
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_decorate.html">길드 꾸미기
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_personality.html">길드 성격
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_join_way.html">가입 방식
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_search_word.html">길드 검색어
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">글쓰기 조건 설정
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_name.html">길드명
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_explain.html">길드설명
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="guild_closing.html">길드폐쇄
+                        <span>></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="add();" class="a1">즐겨찾기추가
+                        <span>></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <section>
+            <%
+            var cover = guild[0].guildCoverImage;
+            if(cover == ''){
+           
+            %>
+            <div class="exile_member" style="background: url('http://duatpwnd.herokuapp.com/yo/images/test10.jpg');">
+                <%}else{%>
+                <div class="exile_member" style="background: url('<%= guild[0].guildCoverImage %>');">
+                    <%}%>
+                    <div class="top_menu">
+                        <a href="#" class="back" onclick="back();">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+                        </a>
+
+                        <a href="#" class="menu" onclick="menu();">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/menu.png" alt="메뉴" title="메뉴">
+                        </a>
+                    </div>
+                    <div class="opacity_mask">
+
+                    </div>
+                    <div class="guild_wrap">
+
+                        <% 
+                        var abc = guild[0].guildimage;
+                        if(abc == ''){
+                        %>
+                    <a href="#" class="guild_master_profile">
+                        <img src="http://duatpwnd.herokuapp.com/yo/images/guild_profile.png" alt="프로필" title="프로필">
+                    </a>
+                    <%}else{%>
+                    <a href="#" class="guild_master_profile">
+                        <img src="<%= guild[0].guildimage  %>" alt="프로필" title="프로필">
+                    </a>
+                    <%}%>
+
+                        <div class="info_wrap info_w">
+                            <a href="#" class="master">
+                                <%= guild[0].guildname %></a>
+                    <img src="http://duatpwnd.herokuapp.com/yo/images/enroll_ico.png" alt="등록대기중" title="등록대기중"
+                        class="enroll">
+                    <div class="member">
+                        <span>멤버1명</span>
+                        <ul>
+                            <li>
+                                <a href="/guildtalk/write/?guildname=<%= guild[0].guildname %>&guildid=<%= guild[0]._id %>"
+                                    class="w1">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/ico4.png" alt="글쓰기" title="글쓰기">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="w2" onclick="preparing();">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/ico3.png" alt="" title="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="w3" onclick="preparing();">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/ico2.png" alt="친구추가" title="친구추가">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="w4" onclick="preparing();">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/ico1.png" alt="찾기" title="찾기">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="swiper-container">
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <div class="swiper-wrapper">
+            <!-- 공지사항 -->
+            <div class="swiper-slide">
+                <ul class="cur_trick">
+                    <%
+                                 for(var i=0; i<posts.length; i++){
+                                     if(posts[i].guildKind == 'board2'){
+                                 %>
+                    <li>
+                        <a href="#" class="guild_mark">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                        </a>
+                        <a href="/guildtalk/read/?read=<%= posts[i]._id %>" class="guild_s1">
+                            <span class="l_move">
+                                <%= posts[i].title %>
+                            </span>
+                            <span>
+                                <span class="nick_name">
+                                    <%= posts[i].email %>
+                                </span>
+                                <span class="date">
+                                    <%= posts[i].updated_at %>
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new"
+                                        class="new">
+                                </span>
+                            </span>
+                        </a>
+                        <a href="#" class="comment">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                            <span>
+                                <%= posts[i].comments.length %>
+                            </span>
+                        </a>
+                    </li>
+                    <%}%>
+                                <%}%>
+                </ul>
+                <div class="page_show">
+                    <% 
+                                var max = pageCount-initial;
+                                if(initial > 5){
+                                    
+                                    max = pageCount;
+                                   
+                                }else{
+                                    max = pageCount;
+                                }
+                            %>
+
+                    <% for(var i=initial; i<max; i++){
+                    
+                                if(page == i ){
+                                   
+                                %>
+                    <a href="#" style="color: #e43737;" onclick="return false;">
+                        <%= i %>
+                    </a>
+                    <%}else{%>
+                    <a
+                        href="/guildmaster/?page=<%= i %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>">
+                        <%= i %>
+                    </a>
+                    <%}%>
+                                <%}%>
+
+                    <% if(pageCount> 2){
+                                  
+                              %>
+                    <!-- 맨처음페이지 -->
+                    <% if(page == 1){
+                                
+                                    %>
+                    <a href="/guildmaster/?page=<%= page+1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="next">next</a>
+                    <%}%>
+
+
+                                <!-- 맨끝페이지 -->
+                                <% if(page == pageCount-1){
+                                
+                                    %>
+                    <a href="/guildmaster/?page=<%= page-1  %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="prev">prev</a>
+                    <%}%>
+
+
+                                <!-- 나머지 -->
+                                <% if(page !== 1 && page !== pageCount-1){
+                                
+                                    %>
+                    <a href="/guildmaster/?page=<%= page-1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="prev">prev</a>
+                    <a href="/guildmaster/?page=<%= page+1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="next">next</a>
+                    <%}%>
+                                <%}%>
+                </div>
+            </div>
+            <!-- 공략 -->
+            <div class="swiper-slide">
+                <ul class="cur_trick">
+                    <% 
+                                for(var i=0; i<posts.length; i++){
+                                    if(posts[i].guildKind == 'board3'){
+                                %>
+                    <li>
+                        <a href="#" class="guild_mark">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                        </a>
+                        <a href="/read/?read=<%= posts[i]._id %>" class="guild_s1">
+                            <span class="l_move">
+                                <%= posts[i].title %>
+                            </span>
+                            <span>
+                                <span class="nick_name">
+                                    <%= posts[i].email %>
+                                </span>
+                                <span class="date">
+                                    <%= posts[i].updated_at %>
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new"
+                                        class="new">
+                                </span>
+                            </span>
+                        </a>
+                        <a href="#" class="comment">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                            <span>
+                                <%= posts[i].comments.length %>
+                            </span>
+                        </a>
+                    </li>
+                    <%}%>
+                                <%}%>
+                </ul>
+
+                <div class="page_show">
+                    <% 
+                                var max = pageCount-initial;
+                                if(initial > 5){
+                                    
+                                    max = pageCount;
+                                   
+                                }else{
+                                    max = pageCount;
+                                }
+                            %>
+
+                    <% for(var i=initial; i<max; i++){
+                    
+                                if(page == i ){
+                                   
+                                %>
+                    <a href="#" style="color: #e43737;" onclick="return false;">
+                        <%= i %>
+                    </a>
+                    <%}else{%>
+                    <a
+                        href="/guildmaster/?page=<%= i %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>">
+                        <%= i %>
+                    </a>
+                    <%}%>
+                                <%}%>
+
+                    <% if(pageCount> 2){
+                                  
+                              %>
+                    <!-- 맨처음페이지 -->
+                    <% if(page == 1){
+                                
+                                    %>
+                    <a href="/guildmaster/?page=<%= page+1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="next">next</a>
+                    <%}%>
+
+
+                                <!-- 맨끝페이지 -->
+                                <% if(page == pageCount-1){
+                                
+                                    %>
+                    <a href="/guildmaster/?page=<%= page-1  %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="prev">prev</a>
+                    <%}%>
+
+
+                                <!-- 나머지 -->
+                                <% if(page !== 1 && page !== pageCount-1){
+                                
+                                    %>
+                    <a href="/guildmaster/?page=<%= page-1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="prev">prev</a>
+                    <a href="/guildmaster/?page=<%= page+1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="next">next</a>
+                    <%}%>
+                                <%}%>
+                </div>
+            </div>
+            <!-- 자유게시판 -->
+            <div class="swiper-slide">
+                <ul class="cur_trick">
+                    <% for(var i=0; i<posts.length; i++){
+                                    if(posts[i].guildKind == 'board4'){
+                                        %>
+                    <li>
+                        <a href="#" class="guild_mark">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/gameprofile1.png" alt="길드마크" title="길드마크">
+                        </a>
+                        <a href="/read/?read=<%= posts[i]._id %>" class="guild_s1">
+                            <span class="l_move">
+                                <%= posts[i].title %>
+                            </span>
+                            <span>
+                                <span class="nick_name">
+                                    <%= posts[i].email %>
+                                </span>
+                                <span class="date">
+                                    <%= posts[i].updated_at %>
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/new.png" alt="new" title="new"
+                                        class="new">
+                                </span>
+                            </span>
+                        </a>
+                        <a href="#" class="comment">
+                            <img src="http://duatpwnd.herokuapp.com/yo/images/comment_ico.png" alt="댓글" title="댓글">
+                            <span>
+                                <%= posts[i].comments.length %>
+                            </span>
+                        </a>
+                    </li>
+                    <%}%>
+                                <%}%>
+                </ul>
+
+                <div class="page_show">
+                    <% 
+                                    var max = pageCount-initial;
+                                    if(initial > 5){
+                                        
+                                        max = pageCount;
+                                       
+                                    }else{
+                                        max = pageCount;
+                                    }
+                                %>
+
+                    <% for(var i=initial; i<max; i++){
+                        
+                                    if(page == i ){
+                                       
+                                    %>
+                    <a href="#" style="color: #e43737;" onclick="return false;">
+                        <%= i %>
+                    </a>
+                    <%}else{%>
+                    <a
+                        href="/guildmaster/?page=<%= i %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>">
+                        <%= i %>
+                    </a>
+                    <%}%>
+                                <%}%>
+
+                    <% if(pageCount> 2){
+                                      
+                                  %>
+                    <!-- 맨처음페이지 -->
+                    <% if(page == 1){
+                                    
+                                        %>
+                    <a href="/guildmaster/?page=<%= page+1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="next">next</a>
+                    <%}%>
+
+
+                                <!-- 맨끝페이지 -->
+                                <% if(page == pageCount-1){
+                                    
+                                        %>
+                    <a href="/guildmaster/?page=<%= page-1  %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="prev">prev</a>
+                    <%}%>
+
+
+                                <!-- 나머지 -->
+                                <% if(page !== 1 && page !== pageCount-1){
+                                    
+                                        %>
+                    <a href="/guildmaster/?page=<%= page-1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="prev">prev</a>
+                    <a href="/guildmaster/?page=<%= page+1 %>&guildid=<%= guild[0].guildid %>&guildname=<%= guild[0].guildname%>"
+                        class="next">next</a>
+                    <%}%>
+                                <%}%>
+
+
+
+                </div>
+
+            </div>
+        </div>
+        </section>
+        <footer>
+            <ul>
+                    <li>
+                            <a href="/friendMain" class="friend_btn">
+                                <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/guildtalk/chat" class="talk_btn">
+                                <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/guildtalk/main" class="guild_btn">
+                                <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                            </a>
+                        </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        var array = ['공지사항', '공략', '자유게시판']
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                clickable: true,
+                el: '.swiper-pagination',
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + array[index] + '</span>';
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

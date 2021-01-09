@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .contents,
+        .title {
+            border: 1px solid black;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .modify,
+        .confirm {
+            background: black;
+            border-radius: 4px;
+            color: white;
+            font-size: 20px;
+            border: 0;
+            padding: 10px;
+            cursor: pointer;
+            vertical-align: middle;
+            margin-top: 20px;
+        }
+
+        .modify_info {
+            margin-top: 20px;
+            width: 30%;
+        }
+
+        .modify_info .title_enter,
+        .modify_info .contents_enter {
+            font-size: 20px;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        .modify_info .contents_enter {
+            margin-top: 20px;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Apple SD Gothic Neo', Sans-serif;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <input type="hidden" :value="number = <%= result[0].number %>">
+        <section>
+            <h1>제목 :
+                <span name="title" class="edit result_title" style="white-space: pre"><%= result[0].title %></span>
+            </h1>
+            <p class="enter_contents" style="white-space: pre">내용 : <span class="edit result_title" name="contents"><%= result[0].contents %></span>
+            </p>
+        </section>
+        <button class="modify" @click="popup();">수정하기</button>
+        <div class="modify_info" v-show="isShow">
+            <div>
+                <input type="text" class="title_enter" placeholder="title" :value="title" v-on:input="title =$event.target.value">
+            </div>
+            <div>
+                <textarea class="contents_enter" rows="10" placeholder="contents" :value="contents" v-on:input="contents = $event.target.value"></textarea>
+            </div>
+            <button class="confirm" @click="modify();">수정완료</button>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#wrap',
+            data: {
+                isShow: false,
+                title: '',
+                contents: '',
+                number: ''
+            },
+            methods: {
+                popup: function () {
+                    this.isShow = !this.isShow;
+                },
+                modify: function () {
+                    const self = this;
+                    axios.post('/modify', {
+                        title: this.title,
+                        contents: this.contents,
+                        number: new Number(this.number)
+                    }).then(function (result) {
+                        console.log(result);
+                        const parse = JSON.parse(result.config.data);
+                        const el = document.querySelectorAll('.edit');
+                        Array.prototype.forEach.call(el, function (e, i) {
+                            console.log(parse);
+                            el[i].innerText = parse[el[i].attributes.name.nodeValue];
+                        })
+                        self.title = '';
+                        self.contents = '';
+                    }).catch(function (err) {
+                        console.log(err);
+                    })
+                }
+            },
+            created() {
+                const edit = document.querySelectorAll('.result_title');
+                edit.forEach(function (el, index) {
+                    const inner = el.innerText;
+                    console.log(inner);
+                    el.innerHTML = inner;
+                })
+
+            }
+        })
+    </script>
+</body>
+
+</html>

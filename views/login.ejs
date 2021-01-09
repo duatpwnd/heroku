@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #000;
+            font-family: consolas;
+
+        }
+
+        .container {
+            position: relative;
+            width: 450px;
+            min-height: 370px;
+            background: rgba(255, 255, 255, .05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 1);
+        }
+
+        .container:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, .1);
+            pointer-events: none;
+        }
+
+        .container:after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #ff0047, #6eff00);
+            pointer-events: none;
+            animation: animate 10s linear infinite;
+        }
+
+        @keyframes animate {
+            0% {
+                filter: blur(60px) hue-rotate(0deg);
+            }
+            100% {
+                filter: blur(60px) hue-rotate(360deg);
+            }
+        }
+
+        .form {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        .form h2 {
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .form .inputBox {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .form .inputBox input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #fff;
+            outline: none;
+            font-size: 18px;
+            color: #fff;
+            padding: 5px 0;
+            font-family: consolas;
+        }
+
+        ::placeholder {
+            color: #eee;
+        }
+
+        .form .inputBox input[type="button"] {
+            background: #fff;
+            color: #000;
+            border: none;
+            font-weight: 900;
+            max-width: 100px;
+            cursor: pointer;
+        }
+
+        .form p,
+        .form .join {
+            color: #eee;
+            margin: 0;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .form p a {
+
+            color: #eee;
+        }
+    </style>
+    <!-- <script>
+        function async1(param) {
+            return new Promise(function (resolve, reject) {
+                resolve(param * 2);
+            });
+        }
+        function async2(param) {
+            return new Promise(function (resolve, reject) {
+                resolve(param * 3);
+            });
+        }
+        function async3(param) {
+            return new Promise(function (resolve, reject) {
+                resolve(param * 4);
+            });
+        }
+
+        var start = 1;
+        async1(start)
+            .then(function (result) {
+                console.log(result);
+                return async2(result);
+            })
+            .then(function (result) {
+                console.log(result);
+                return async3(result);
+            })
+            .then(function (result) {
+                console.log(result);
+            });
+    </script> -->
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="form">
+            <h2>Login Form</h2>
+            <form>
+                <div class="inputBox">
+                    <input type="text" name="" placeholder="Username" v-on:input="userid=$event.target.value">
+                </div>
+                <div class="inputBox">
+                    <input type="password" name="" placeholder="Password" v-on:input="userpw=$event.target.value">
+                </div>
+                <div v-show='notice'>
+                    <p style="color: red;">
+                        아이디 또는 비밀번호가 일치하지 않습니다.
+                    </p>
+                </div>
+                <div class="inputBox">
+                    <input type="button" name="" value="Login" @click="login();">
+                </div>
+                <a href="/join" class="join">
+                    join
+                </a>
+                <p>Forgot Password?
+                    <a href="#">Click Here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '.container',
+            data: {
+                userid: '',
+                userpw: '',
+                notice: false
+            },
+            methods: {
+                login: function () {
+                    const self = this;
+                    axios.post('/login', {
+                        userid: self.userid,
+                        userpw: self.userpw
+                    }).then(function (result) {
+                        console.log(result);
+                        if (result.data.length == 0) {
+                            self.notice = true;
+                        } else if (result.data == false) {
+                            self.notice = true;
+                        } else {
+                            self.notice = false;
+                        }
+                    }).catch(function (err) {
+                        console.log(err);
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

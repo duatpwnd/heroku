@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>글수정</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/font.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/write.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/common/font.css"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="http://duatpwnd.herokuapp.com/yo/ckeditor/ckeditor.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.btn_wrap1 a').on('click', function () {
+                $('.btn_wrap1 a').css({
+                    'border': '1px solid #e43737',
+                    'color': '#e43737'
+                })
+                $('.btn_wrap1 a').not(this).css({
+                    'border': '1px solid #ccc',
+                    'color': '#ccc'
+                })
+            })
+            $('.ok_btn1').on('click', function () {
+                var a = confirm('글을 등록하시겠습니까?');
+                if (a) {
+                    return;
+                } else {
+                    return false;
+                }
+            })
+        })
+    </script>
+</head>
+
+<body>
+
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+        <header>
+            <a href="#" class="back" onclick="back();">
+                <img src="http://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>글수정</h1>
+            <a href="guild_master.html" class="enroll_btn">수정</a>
+        </header>
+
+        <form action="/modify/success/?curn=<%= curn %>&page=1" method="post">
+            <fieldset>
+                <legend>글쓰기</legend>
+                <section class="guild">
+                    <select name="game">
+                        <option>[게임](필수)</option>
+                        <option>게임명1</option>
+                        <option>게임명2</option>
+                        <option>게임명3</option>
+                        <option>게임명4</option>
+                    </select>
+                    <select name="guild">
+                        <option>[길드](선택)</option>
+                        <option>길드명1</option>
+                        <option>길드명2</option>
+                        <option>길드명3</option>
+                        <option>길드명4</option>
+                    </select>
+                    <select name="board">
+                        <option name="board1">[게시판](필수)</option>
+                        <option name="board2">자유게시판</option>
+                        <option name="board3">공개게시판</option>
+                        <option name="board4">공지사항</option>
+                        <option name="board5">새소식</option>
+                    </select>
+                    <div class="btn_wrap1">
+                        <a href="#" class="btn1 btn3" value='a1'>전체공개</a>
+                        <a href="#" class="btn2 btn4" value='a2'>길드공개</a>
+                    </div>
+
+
+                    <div class="write">
+                        <input type="hidden" name="objectid" value="<%= modify[0]._id%>">
+                        <input type="text" name="title" placeholder="제목" value="<%= modify[0].title%>">
+                        <input type="hidden" name="writer" value="<%= userSession.email %>">
+                        <textarea id="editor1" rows="15" placeholder="내용" name="contents"><%= modify[0].contents%></textarea>
+                        <script>
+                            // 플러그인 쓸 경로 설정해주기 //
+                            CKEDITOR.plugins.addExternal('image2,colorbutton', 'plugin.js')
+                            CKEDITOR.replace('editor1', {
+                                filebrowserUploadUrl: 'upload',
+                                extraPlugins: 'image2,colorbutton'
+                            });
+
+                        </script>
+                    </div>
+                    <div class="btn_wrap2">
+                        <input type="button" class="cancel_btn1" value="취소">
+                        <input type="submit" class="ok_btn1" value="수정완료">
+                    </div>
+                </section>
+            </fieldset>
+        </form>
+
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+
+</body>
+
+</html>

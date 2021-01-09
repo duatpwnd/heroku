@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>톡모두보기</title>
+    <link href="https://duatpwnd.herokuapp.com/yo/common/swiper.min.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/swiper_search.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" rel="stylesheet" type="text/css">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/socket.io.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/common.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/swiper.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var socket = io();
+
+            var flag = true;
+            $(document).on('click', '.alarm_on', function () {
+                $('.alarm').css({ 'display': 'none' })
+            })
+            $(document).on('click', '.alarm_off', function () {
+                $('.alarm').css({ 'display': 'inline-block' })
+            })
+            socket.on('room list', function (data) {
+                console.log(data);
+                const li = document.createElement('li');
+                const img = document.createElement('img');
+                const div = document.createElement('div');
+                div.classList.add('member_info');
+                const roomEnter = document.createElement('a');
+                const p = document.createElement('p');
+                p.classList.add('member');
+                p.classList.add('ex');
+                p.innerText = data.name;
+                roomEnter.classList.add('user_id');
+                roomEnter.setAttribute('href', '/guildtalk/chat');
+                roomEnter.innerText = data.name;
+                roomEnter.appendChild(p)
+                div.appendChild(roomEnter);
+                const dateInfo = document.createElement('div');
+                dateInfo.classList.add('talk_number');
+                const spanDate = document.createElement('span');
+                spanDate.innerText = data.date;
+                spanDate.classList.add('talk_date');
+                dateInfo.appendChild(spanDate);
+                div.appendChild(dateInfo);
+                const numberDate = document.createElement('span');
+                numberDate.innerText = '5';
+                numberDate.classList.add('talk_number_style');
+                dateInfo.appendChild(numberDate);
+                img.setAttribute('src', 'http://duatpwnd.herokuapp.com/yo/images/basic_profile.png');
+                const a = document.createElement('a');
+                a.classList.add('profile_thumb');
+                a.appendChild(img);
+                li.appendChild(a);
+                li.appendChild(div);
+                document.getElementsByClassName('member_list_wrap')[0].appendChild(li);
+            })
+        })
+    </script>
+    <style>
+        .swiper-pagination-bullet {
+            width: 33.33%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading">
+        <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+    </div>
+    <div id="wrap">
+
+        <header>
+            <div class="search_menu m_menu">
+                <input type="text" class="nickname_enter" placeholder="검색어 입력" onkeyup="search();">
+                <button type="submit" class="nickname_search">
+            </div>
+        </header>
+        <div class="swiper-container">
+            <div class="swiper-pagination"></div>
+            <div class="swiper-wrapper">
+                <!-- Add Pagination -->
+                <div class="swiper-slide">
+                    <div class="member_list">
+                        <ul class="member_list_wrap">
+                            <!-- <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="chat_room.html" class="user_id">pc슬레이어
+                                        <img src="http://duatpwnd.herokuapp.com/yo/images/pin.png" class="topFixed" alt="상단고정" title="상단고정">
+                                        <img src="http://duatpwnd.herokuapp.com/yo/images/nonalarm.png" class="alarm" alt="알림" title="알림">
+                                        <span class="member_num">15</span>
+                                        <p class="member ex">길드톡방입니다.</p>
+                                    </a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="#" class="user_id" onclick="chat2()">상단고정&즐겨찾기 롱터치
+                                        <img src="http://duatpwnd.herokuapp.com/yo/images/pin.png" class="topFixed" alt="상단고정" title="상단고정">
+                                        <img src="http://duatpwnd.herokuapp.com/yo/images/nonalarm.png" class="alarm" alt="알림" title="알림">
+                                        <span class="member_num">15</span>
+                                        <p class="member ex">길드톡방입니다.</p>
+                                    </a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="#" class="user_id" onclick="chat1()">상단고정&즐겨찾기 롱터치
+                                        <img src="http://duatpwnd.herokuapp.com/yo/images/pin.png" class="topFixed" alt="상단고정" title="상단고정">
+                                        <img src="http://duatpwnd.herokuapp.com/yo/images/nonalarm.png" class="alarm" alt="알림" title="알림">
+                                        <span class="member_num">15</span>
+                                        <p class="member ex">길드톡방입니다.</p>
+                                    </a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="member_list">
+                        <ul class="member_list_wrap">
+                            <!-- <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="#" class="user_id">자바스크립트
+                                        <span class="member_num">15</span>
+                                    </a>
+                                    <a href="#" class="member">a방입니다.</a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="#" class="user_id">node맨
+                                        <span class="member_num">15</span>
+                                    </a>
+                                    <a href="#" class="member">b방입니다.</a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="member_list">
+                        <ul class="member_list_wrap">
+                            <!-- <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="#" class="user_id">무신사스토어
+                                        <span class="member_num">15</span>
+                                    </a>
+                                    <a href="#" class="member">길드톡방입니다.</a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="profile_thumb">
+                                    <img src="http://duatpwnd.herokuapp.com/yo/images/basic_profile.png" alt="기본프로필" title="기본프로필">
+                                </a>
+                                <div class="member_info">
+                                    <a href="#" class="user_id">힙합퍼
+                                        <span class="member_num">15</span>
+                                    </a>
+                                    <a href="#" class="member">길드톡1방입니다.</a>
+                                    <div class="talk_number">
+                                        <span class="talk_date">2018-05-02</span>
+                                        <span class="talk_number_style">5</span>
+                                    </div>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <a href="/guildtalk/chatRoom" class="chatmake">방만들기</a>
+        </div>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        // pagination 설정 //
+        var array = ['모두보기', '길드톡', '개인톡'];
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (array[index]) + '</span>';
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

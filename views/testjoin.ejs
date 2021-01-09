@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background: black;
+        }
+        legend {
+            color: white;
+            font-size: 20px;
+        }
+        label {
+            color: white;
+            font-size: 20px;
+            display: inline-block;
+            width: 140px;
+        }
+        .join_row {
+            margin-top: 20px;
+        }
+        .join_input {
+            padding: 10px;
+            font-size: 20px;
+            max-width: 500px;
+            width: 60%;
+        }
+        .isborder {
+            box-shadow: 0px 0px 7px 5px #bfff00;
+        }
+        .notice {
+            font-size: 17px;
+            color: red;
+            margin-left: 140px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <form>
+            <fieldset>
+                <legend>INFO</legend>
+                <div>
+                    <label for="username">
+                        이름
+                    </label>
+
+                    <input type="text" id="username" class="join_input" :class="{isborder:active == 1}" @click="isActive(1);" v-on:input="name=$event.target.value">
+                </div>
+                <div class="join_row">
+                    <label for="userphone">
+                        전화번호
+                    </label>
+                    <input type="tel" placeholder="'-' 없이 숫자만 입력해주세요" id="userphone" class="join_input" :class="{isborder:active == 2}" @click="isActive(2);"
+                        v-on:input="phone=$event.target.value">
+                    <p class="notice" v-show="notice_phone">
+                        유효하지 않는 번호입니다.
+                    </p>
+                </div>
+                <div class="join_row">
+                    <label for="userid">
+                        아이디
+                    </label>
+                    <input type="text" id="userid" class="join_input" :class="{isborder:active == 3}" @click="isActive(3);" v-on:input="userid=$event.target.value">
+                    <button type="button" @click="repeat();">중복확인</button>
+                    <p class="notice" v-show="notice_id_ok">
+                        사용가능한 아이디입니다.
+                    </p>
+                    <p class="notice" v-show="notice_id">
+                        이미 존재하는 아이디입니다.
+                    </p>
+                </div>
+                <div class="join_row">
+                    <label for="userpw">
+                        비밀번호
+                    </label>
+                    <input type="password" id="userpw" class="join_input" :class="{isborder:active == 4}" @click="isActive(4);" v-on:input="userpw=$event.target.value">
+                </div>
+                <div class="join_row">
+                    <label for="userpw1">
+                        비밀번호 확인
+                    </label>
+                    <input type="password" id="userpw1" class="join_input" :class="{isborder:active == 5}" @click="isActive(5);" v-on:input="userpw1=$event.target.value">
+                    <p class="notice" v-show="notice_pw">
+                        비밀번호가 일치하지 않습니다.
+                    </p>
+                </div>
+                <div>
+                    <button type="button" @click="join();">JOIN</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <script>
+        new Vue({
+            el: '#wrap',
+            data: {
+                active: 1,
+                name: '',
+                phone: '',
+                userid: '',
+                userpw: '',
+                userpw1: '',
+                notice_id_ok: false,
+                notice_phone: false,
+                notice_pw: false,
+                notice_id: false
+            },
+            methods: {
+                isActive: function (index) {
+                    this.active = index;
+                },
+                // 회원가입 //
+                join: function () {
+                    const regExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/g;
+                    const test = regExp.test(this.phone);
+                    if (!test) {
+                        this.notice_phone = !this.notice_phone;
+                    } else if (this.userpw != this.userpw1) {
+                        this.notice_pw = !this.notice_pw;
+                    } else {
+                        const self = this;
+                        axios.post('/register', {
+                            username: self.name,
+                            usertel: self.phone,
+                            userid: self.userid,
+                            userpw: self.userpw
+                        }).then(function (result) {
+                            window.location = '/login';
+                        }).catch(function (err) {
+                            console.log(err);
+                        })
+                    }
+                },
+                repeat: function () {
+                    const self = this;
+                    axios.post('/repeat', {
+                        userid: self.userid
+                    }).then(function (result) {
+                        console.log(result);
+                        console.log(result.data.length);
+                        if (result.data.length == 1) {
+                            self.notice_id_ok = false;
+                            self.notice_id = true;
+                        } else {
+                            self.notice_id_ok = true;
+                            self.notice_id = false;
+                        }
+                    }).catch(function (err) {
+                        console.log(err);
+                    })
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

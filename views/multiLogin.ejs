@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>멀티로그인</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/multi.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        <header>
+            <a href="#" class="back" @click="back();">
+                <img src="https://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>로그인</h1>
+        </header>
+        <section>
+            <ul class="gnb">
+                <li>
+                    <a href="/guildtalk/google">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/btn_google_login.png" alt="구글플레이 아이디로 로그인" title="구글플레이 아이디로 로그인">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/facebook">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/btn_facebook_login.png" alt="페이스북 아이디로 로그인" title="페이스북 아이디로 로그인">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/emailLogin">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/btn_email_login.png" alt="이메일 주소로 로그인" title="이메일 주소로 로그인">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/naver">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/btn_naver_login.png" alt="네이버 주소로 로그인" title="네이버 주소로 로그인">
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        new Vue({
+            el: '#wrap',
+            methods: {
+                back: function () {
+                    history.back(-1);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

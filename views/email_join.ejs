@@ -1,0 +1,225 @@
++
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>이메일 주소로 가입</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/join_method.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/placeholder.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="loading" v-show="loading">
+            <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+        </div>
+        <header>
+            <a href="#" class="back" onclick="back();">
+                <img src="http://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1>이메일 주소로 가입</h1>
+        </header>
+        <section>
+            <div class="email_join">
+                <form action="/guildtalk/join" method="post" v-on:submit.prevent="vaildate();">
+                    <fieldset>
+                        <legend>이메일 주소로 가입</legend>
+                        <div class="cord_enter">
+                            <div class="phone_receive">
+                                <input type="email" name="email" v-on:input="email=$event.target.value" placeholder="이메일 주소" class="com_input_box" id="em1">
+                                <input type="button" value="인증코드 받기" class="cord_btn" @click="emailJoin();">
+                            </div>
+                            <% if(message.length>0){ %>
+                                <p style="color:#e43737;
+                                margin-left: 3.5%;">
+                                    <%= message %>
+                                </p>
+                                <% } %>
+                                    <p class="ph_txt1">이메일 주소를 입력하세요.</p>
+                                    <p class="ph_txt3">잘못된 이메일 주소입니다.</p>
+                                    <div class="cord_confirm">
+                                        <input type="password" placeholder="인증코드 입력" class="com_input_box" id="ph2" v-on:input=cord=$event.target.value>
+                                        <span class="limit_time" v-show="limitTime">{{initial}}</span>
+                                        <input type="button" value="확인" :disabled="cord.length < 1" class="confirm_btn" @click="cordConfirm();">
+                                    </div>
+                                    <p class="ph_txt4">인증코드를 입력하세요.</p>
+                                    <p class="ph_txt2">인증코드가 일치하지 않습니다.</p>
+                        </div>
+                        <div class="pw_enter">
+                            <div class="pw_confirm1">
+                                <input type="password" v-on:input="password1=$event.target.value" name="password" placeholder="비밀번호" class="com_input_box"
+                                    id="pw1">
+                            </div>
+                            <p class="pw_txt1">비밀번호를 입력하세요.</p>
+                            <p class="pw_txt2">비밀번호 8자이상 입력하세요.</p>
+                            <div class="pw_confirm2">
+                                <input type="password" v-on:input="password2=$event.target.value" placeholder="비밀번호 확인" class="com_input_box" id="pw2">
+                            </div>
+                            <p class="pw_txt3">비밀번호가 일치 하지 않습니다.</p>
+                        </div>
+                        <div class="agree_wrap">
+                            <div class="terms">
+                                <input type="checkbox" id="terms_agree" v-model="trimIsCheck">
+                                <label for="terms_agree">
+                                    <span></span>
+                                    이용약관 동의</label>
+                                <a href="#">내용보기</a>
+                            </div>
+                            <div class="privacy">
+                                <input type="checkbox" id="privacy_agree" v-model="privacyIsCheck">
+                                <label for="privacy_agree">
+                                    <span></span>
+                                    개인정보 취급방침 동의</label>
+                                <a href="#">내용보기</a>
+                            </div>
+                        </div>
+                        <p class="help_txt">
+                            비밀번호 분실 이나 기타 계정 관련 문제 발생시 이메일을 통하여 도움 받으실 수 있습니다.
+                        </p>
+                        <input type="submit" class="email_join_btn" value="가입하기">
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+        <footer>
+            <ul>
+                <li>
+                    <a href="/friendMain" class="friend_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/friend.png" alt="친구" title="친구">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/chat" class="talk_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/talk.png" alt="채팅" title="채팅">
+                    </a>
+                </li>
+                <li>
+                    <a href="/guildtalk/main" class="guild_btn">
+                        <img src="https://duatpwnd.herokuapp.com/yo/images/guild.png" alt="커뮤니티" title="커뮤니티">
+                    </a>
+                </li>
+            </ul>
+        </footer>
+    </div>
+    <script>
+        new Vue({
+            el: '#wrap',
+            data: {
+                email: '',
+                cord: '',
+                password1: '',
+                password2: '',
+                trimIsCheck: true,
+                privacyIsCheck: false,
+                randomCord: '',
+                limitTime: false,
+                flag: true,
+                initial: 10,
+                loading: false
+            },
+            methods: {
+                cordConfirm: function () {
+                    if (this.randomCord != this.cord) {
+                        alert('인증번호가 일치하지 않습니다.');
+                    } else {
+                        alert('인증이 되었습니다.');
+                        clearInterval(myTime);
+                        this.initial = 10;
+                        this.flag = true;
+                        this.limitTime = false;
+                    }
+                },
+                timer: function () {
+                    const self = this;
+                    self.limitTime = true;
+                    myTime = setInterval(function () {
+                        self.initial--; if (self.initial == 0) {
+                            clearInterval(myTime);
+                            alert('시간이 초과되었습니다.');
+                            location.reload();
+                        }
+                    }, 1000);
+                },
+                emailJoin: function () {
+                    const self = this;
+                    const regExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+                    const test = regExp.test(self.email);
+                    if (self.flag) {
+                        self.flag = false;
+                        if (test) {
+                            random = Math.floor(Math.random() * 10000) + 1000;
+                            if (random >= 10000) {
+                                random = random - 1000;
+                            }
+                            axios.post('/email/password', {
+                                email: self.email,
+                                random: random
+                            }).then(function (result) {
+                                console.log(result);
+                                if (result.data.result == 200) {
+                                    self.randomCord = random;
+                                    alert(result.data.message + '로 메일이 전송되었습니다');
+                                    self.timer();
+                                } else {
+                                    alert(result.data.message);
+                                }
+                            }).catch(function (error) {
+                                console.log(error);
+                            })
+                        } else {
+                            alert('유효하지 않은 형식의 이메일 주소입니다.');
+                            self.flag = true;
+                        }
+                    } else {
+                        return;
+                    }
+                },
+                // 유효성 검사 //
+                vaildate: function () {
+                    const self = this;
+                    const regExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+                    const test = regExp.test(self.email);
+                    if (!test) {
+                        alert('올바르지않은 이메일 형식입니다.');
+                        return false;
+                    } else if (this.cord == '') {
+                        alert('인증코드를 입력하세요');
+                        return false;
+                    } else if (this.password1 == '') {
+                        alert('비밀번호를 입력하세요');
+                        return false;
+                    } else if (this.password2 == '') {
+                        alert('비밀번호 확인을 입력하세요');
+                        return false;
+                    } else if (this.password1 != this.password2) {
+                        alert('비밀번호가 일치하지 않습니다.');
+                        return false;
+                    } else if (this.password1.trim().length < 8) {
+                        alert('비밀번호를 8자이상 입력하세요');
+                        return false;
+                    } else if (this.trimIsCheck == false) {
+                        alert('이용약관에 동의해주세요');
+                        return false;
+                    } else if (this.privacyIsCheck == false) {
+                        alert('개인정보 취급방침에 동의해주세요')
+                        return false;
+                    } else if (this.cord != this.randomCord) {
+                        alert('인증번호가 일치하지 않습니다.');
+                        return false;
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>채팅방</title>
+    <link rel="shortcut icon" href="https://duatpwnd.herokuapp.com/yo/images/G-512.ico">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/common.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/css/chat_room.css" rel="stylesheet" type="text/css">
+    <link href="https://duatpwnd.herokuapp.com/yo/common/mediaquery.css" type="text/css" rel="stylesheet">
+    <script src="https://duatpwnd.herokuapp.com/yo/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://duatpwnd.herokuapp.com/yo/js/socket.io.js"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            border: 3px solid #fff;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: black;
+        }
+
+        html body #wrap {
+            height: 100%;
+        }
+
+        html body #wrap header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 2.93% 0;
+            z-index: 1;
+            background: #e43737;
+        }
+
+        @media all and (max-width:768px) {
+            .profile_img {
+                height: 11vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <input type="hidden" class="user_name" ref="username" value="<%= userinfo.email %>">
+        <div class="loading" v-show="loading">
+            <img id="loading-image" src="http://duatpwnd.herokuapp.com/yo/images/32.gif" alt="Loading" />
+        </div>
+        <div class="menu_wrap">
+            <ul>
+                <li class="top">
+                    메뉴
+                    <img src="http://duatpwnd.herokuapp.com/yo/images/bigclose.png" alt="닫기" title="닫기" class="close" onclick="disappear();">
+                </li>
+                <li>
+                    <a href="invite.html">
+                        <span>대화상대초대</span>
+                        <span class="arrow">></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="friend_main.html">
+                        <span>나가기</span>
+                        <span class="arrow">></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#l">
+                        <span>대화상대</span>
+                    </a>
+                    <ul class="dialog">
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <header>
+            <a href="#" class="back" onclick="back();">
+                <img src="http://duatpwnd.herokuapp.com/yo/images/back.png" alt="뒤로가기" title="뒤로가기">
+            </a>
+            <h1 class="testname">그룹채팅</h1>
+            <a href="#" class="menu" onclick="menu();">
+                <img src="http://duatpwnd.herokuapp.com/yo/images/menu.png" alt="메뉴" title="메뉴">
+            </a>
+        </header>
+        <section class="chat">
+        </section>
+        <div class="message_wrap">
+            <div class="message_send">
+                <form ref="upload">
+                    <input type='file' id='upload' accept="image" multiple name="kakaoupload" @change="upload">
+                </form>
+                <label for="upload">
+                    <img src="http://duatpwnd.herokuapp.com/yo/images/ico-clip.png" class="upload_btn">
+                </label>
+                <textarea class="message_enter" :value="message" @keyup="messageKeyup();" v-on:input="message=$event.target.value" placeholder="메세지를 입력해 주세요"
+                    autofocus rows="1" ref="message"></textarea>
+                <input type="button" class="send_btn" value="전송" @click="messageSend();" ref="send_btn">
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#wrap',
+            data: {
+                socket: '',
+                loading: false,
+                message: ''
+            },
+            methods: {
+                upload: function () {
+                    console.log('change 호출');
+                    const self = this;
+                    const form = this.$refs.upload;
+                    const formdata = new FormData(form);
+                    axios.post('/chat/upload', formdata).then(function (success) {
+                        console.log(success);
+                        self.loading = false;
+                        if (success.data.type == 'image') {
+                            self.message = '<img src = "' + success.data.url + '" style="vertical-align:middle; width=100%">'
+                        } else {
+                            self.message = '<video controls="controls" style="vertical-align: middle; width: 100%"><source src = ' + success.data.url + ' type="video/webm"></video>'
+                            self.$refs.send_btn.style.backgroundColor = 'gold';
+                        }
+                    }).catch(function (err) {
+                        console.log(err);
+                    })
+                },
+                messageKeyup: function () {
+                    const message = this.$refs.message.value.trim();
+                    const regexp = /^\S/; //공백문자가 아닌 문자
+                    const regexp1 = /^\s+\S/; // \s 공백문자
+                    const test = regexp.test(message);
+                    const test1 = regexp1.test(message);
+                    if (test || test1) {
+                        this.$refs.send_btn.style.backgroundColor = 'gold';
+                    } else {
+                        this.$refs.send_btn.style.backgroundColor = '#ccc';
+                    }
+                },
+                messageSend: function () {
+                    this.$refs.message.focus();
+                    this.$refs.send_btn.style.backgroundColor = '#ccc';
+                    this.socket.emit('message', this.$refs.username.value, this.message);
+                    this.message = '';
+                }
+            },
+            created() {
+                $('section').scrollTop($("section")[0].scrollHeight);
+                const self = this;
+                this.socket = io();
+                this.socket.on('receive message', function (name, msg, socket) { //3
+                    let unique = self.$refs.username.value;
+                    let date = new Date();
+                    let year = date.getFullYear();
+                    let month = date.getMonth() + 1;
+                    let day = date.getDate();
+                    let hours = date.getHours();
+                    let minutes = date.getMinutes();
+
+                    const m1 = document.createElement('div');
+                    m1.classList.add('m1');
+                    const div = document.createElement('div');
+                    m1.appendChild(div);
+                    const a = document.createElement('a');
+                    div.appendChild(a);
+                    a.classList.add('profile_img');
+                    const img = document.createElement('img');
+                    img.setAttribute('src', 'https://duatpwnd.herokuapp.com/yo/images/test.jpg');
+                    a.appendChild(img);
+                    const span = document.createElement('span');
+                    span.classList.add('username');
+                    span.classList.add('name' + socket);
+                    span.innerText = name;
+                    div.appendChild(span);
+                    const p = document.createElement('p');
+                    p.classList.add('text_message');
+                    p.innerHTML = msg;
+                    m1.appendChild(p);
+                    const spanDate = document.createElement('span');
+                    spanDate.classList.add('date');
+                    m1.appendChild(spanDate);
+                    document.getElementsByClassName('chat')[0].appendChild(m1);
+                    // $('section').append('<div class = "m1"><div><a href = "#" class = "profile_img"><img src = "https://duatpwnd.herokuapp.com/yo/images/test.jpg"></a><span class = "username name' + socket + '"></span></div><p class=text_message>' + msg + '</p><span class = date></span></div>');
+                    // $('.name' + socket).text(name);
+                    // 자기 자신 //
+                    const query = document.querySelectorAll('.name' + socket);
+                    query.forEach(function (e, i) {
+                        if (e.textContent == unique) {
+                            var maxparent = e.parentElement.parentElement;
+                            var textmessage = e.parentElement.nextElementSibling;
+                            var img = e.previousElementSibling;
+                            e.style.display = 'none';
+                            img.style.display = 'none';
+                            textmessage.style.backgroundColor = '#f8cb35';
+                            textmessage.style.display = 'inline-block';
+                            textmessage.style.textAlign = 'left';
+                            textmessage.style.padding = '1%';
+                            maxparent.style.textAlign = 'right';
+                        }
+                    })
+                    if (hours > 11) {
+                        $('.date').text('PM' + hours + ':' + minutes);
+                    } else {
+                        $('.date').text('AM' + hours + ':' + minutes);
+                    }
+                    $('section').scrollTop($("section")[0].scrollHeight);
+                });
+                setTimeout(function () {
+                    self.socket.emit('join', $('.user_name').val());
+                }, 1000);
+                // 대화상대 멤버//
+                this.socket.on('room list', function (user, joinMember) {
+                    const p = document.createElement('p');
+                    p.innerText = joinMember + "님이 접속하셨습니다.";
+                    document.getElementsByClassName('chat')[0].appendChild(p);
+                    document.getElementsByClassName('dialog')[0].innerHTML = '';
+                    let result = Object.values(user);
+                    for (let i = 0; i < result.length; i++) {
+                        const li = document.createElement('li');
+                        li.innerText = result[i];
+                        document.getElementsByClassName('dialog')[0].appendChild(li);
+                    }
+                })
+                // 나간 멤버
+                this.socket.on('leave list', function (user, leaveMember) {
+                    const p = document.createElement('p');
+                    p.innerText = leaveMember + "님이 나가셨습니다.";
+                    document.getElementsByClassName('chat')[0].appendChild(p);
+                    document.getElementsByClassName('dialog')[0].innerHTML = '';
+                    let result = Object.values(user);
+                    for (let i = 0; i < result.length; i++) {
+                        const li = document.createElement('li');
+                        li.innerText = result[i];
+                        document.getElementsByClassName('dialog')[0].appendChild(li);
+                    }
+                })
+            },
+        })
+    </script>
+</body>
+
+</html>
